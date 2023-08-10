@@ -1,0 +1,131 @@
+@import './global.scss';
+@import './variables.scss';
+@import './mixins';
+
+.buttonRow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1em;
+
+    @include respond-to("small") {
+      flex-direction: row;
+    }
+
+    button {
+        margin: 0.5em;
+        border-radius: 0.5em;
+        min-height: 2.5em;
+        width: 7em;
+        color: white;
+        background-color: #2D4471;
+
+        @include respond-to("small") {
+          font-size: 1.25em;
+        }
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    .active {
+       box-shadow: 5px 5px 2px 1px rgba(0, 0, 255, 0.2);
+
+       @include respond-to("small") {
+         box-shadow: 8px 8px 2px 1px rgba(0, 0, 255, 0.2);
+       }
+    }
+}
+
+.left-arrow, .right-arrow {
+    margin: 0.5em;
+    border-radius: 0.5em;
+    min-height: 2.5em;
+    width: 7em;
+    color: white;
+    background-color: #28774F;
+}
+
+.code-content {
+    overflow: auto;
+    padding: 1em 0;
+}
+
+.code-snippet {
+
+    margin: 0;
+    box-shadow: 0px 14px 25px #8C8C8C;
+    border-radius: 0.5em;
+    background: white;
+    color: #303332;
+
+
+    @include respond-to("small") {
+        font-size: 1.55rem;
+        margin: 0 15%;
+    }
+
+    &.updating {
+      opacity: 0;
+      transition: 1s ease-in-out;
+    }
+}
+
+.code-line {
+    width: fit-content;
+    border-radius: 0.5em;
+}
+
+.correct-line {
+    background: #69d869;
+}
+
+.incorrect-line {
+    background: #f08484;
+}
+
+.github-link {
+    color: black;
+    @include respond-to("small") {
+        font-size: 2rem;
+    }
+}
+
+.info-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.item-number {
+    font-size: 1.75em;
+
+    @include respond-to("small") {
+        font-size: 2rem;
+    }
+}
+
+.project-source {
+    padding: 0.75em;
+
+    @include respond-to("small") {
+        font-size: 2rem;
+    }
+}
+
+.swipe-arrows {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 2em;
+    width: 100%;
+    text-align: center;
+
+    @include respond-to("small") {
+        font-size: 2rem;
+        width: 70%;
+    }
+}

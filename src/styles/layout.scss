@@ -1,0 +1,38 @@
+@import './global.scss';
+@import './mixins.scss';
+@import './variables.scss';
+
+
+.welcome-text {
+    margin: 1em;
+    font-size: 1rem;
+
+    @include respond-to("small") {
+      margin: 2em 12%;
+      font-size: 2rem;
+    }
+}
+
+.splash-welcome {
+  text-align: center;
+  font-size: 1rem;
+
+  @include respond-to("small") {
+    font-size: 2rem;
+  }
+}
+
+.goHome {
+  margin: 0 1em;
+  font-size: 1rem;
+
+  @include respond-to("small") {
+    margin: 0 12%;
+    font-size: 2rem;
+  }
+}
+
+.container {
+    font-weight: bold;
+    padding-top: 2em;
+}
