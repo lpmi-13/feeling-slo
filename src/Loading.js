@@ -14,7 +14,7 @@ export default function Loading({ data }) {
     useEffect(() => {
         const delay = generateRandomDelay();
         setCurrentDelay(delay);
-        const timer = setTimeout(() => {
+        setTimeout(() => {
             setLoading(false);
             console.log(data);
         }, currentDelay);
