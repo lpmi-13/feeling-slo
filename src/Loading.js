@@ -18,6 +18,7 @@ export default function Loading({ data }) {
             setLoading(false);
             console.log(data);
         }, currentDelay);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading]);
 
     const reloadOnSlow = () => {
