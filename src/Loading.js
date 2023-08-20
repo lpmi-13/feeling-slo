@@ -1,34 +1,25 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const generateRandomDelay = () => {
-    const delay = Math.floor(Math.random() * 3000 + 200);
-    console.log(`generated a delay of ${delay} milliseconds`);
-    return delay;
-};
-
-export default function Loading({ data }) {
+export default function Loading({ addData, currentDelay, handleIncrement }) {
     const [loading, setLoading] = useState(true);
-    const [currentDelay, setCurrentDelay] = useState(null);
 
     useEffect(() => {
-        const delay = generateRandomDelay();
-        setCurrentDelay(delay);
         setTimeout(() => {
             setLoading(false);
-            console.log(data);
         }, currentDelay);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loading]);
+    }, [currentDelay, loading]);
 
     const reloadOnSlow = () => {
+        handleIncrement();
+        addData(currentDelay, false);
         setLoading(true);
-        data[currentDelay] = "slow";
     };
 
     const reloadOnFast = () => {
+        handleIncrement();
+        addData(currentDelay, true);
         setLoading(true);
-        data[currentDelay] = "fast";
     };
 
     return loading ? (

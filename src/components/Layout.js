@@ -23,13 +23,6 @@ const Layout = ({ children }) => {
                 <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    aria-label="search"
-                >
-                    <Link to="/search">Search</Link>
-                </motion.button>
-                <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
                     aria-label="results"
                 >
                     <Link to="/results">Results</Link>

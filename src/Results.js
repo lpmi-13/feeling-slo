@@ -1,4 +1,4 @@
-export default function Results() {
+export default function Results({ data }) {
     return (
         <div>
             <h3>
