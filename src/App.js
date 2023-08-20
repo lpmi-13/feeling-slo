@@ -16,7 +16,6 @@ const generateRandomDelay = () => {
 
 const addData = (delay, fastEnough) => {
     loadingTimes.push({ delay, fastEnough });
-    console.log(loadingTimes);
 };
 
 function App() {

@@ -14,7 +14,7 @@ export default function Results({ data }) {
                   sum[perception.fastEnough] =
                       (sum[perception.fastEnough] || 0) + 1;
                   return sum;
-              })
+              }, {})
             : { true: 0, false: 0 };
 
     return (
