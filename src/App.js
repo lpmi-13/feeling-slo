@@ -6,7 +6,7 @@ import Loading from "./Loading";
 import Results from "./Results";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-const loadingTimes = {};
+const loadingTimes = [];
 
 const generateRandomDelay = () => {
     const delay = Math.floor(Math.random() * 3000 + 200);
@@ -15,7 +15,7 @@ const generateRandomDelay = () => {
 };
 
 const addData = (delay, fastEnough) => {
-    loadingTimes[delay] = fastEnough;
+    loadingTimes.push({ delay, fastEnough });
     console.log(loadingTimes);
 };
 
