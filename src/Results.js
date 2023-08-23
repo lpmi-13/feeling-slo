@@ -60,6 +60,14 @@ export default function Results({ data }) {
             </h3>
             {data.length !== 0 ? (
                 <div>
+                    <p>
+                        The fastest load time was{" "}
+                        {convertToSeconds(Math.min(...loadTimeData))} seconds
+                    </p>
+                    <p>
+                        The slowest load time was{" "}
+                        {convertToSeconds(Math.max(...loadTimeData))} seconds
+                    </p>
                     <p>your p50 is {p50} seconds</p>
                     <p>your p90 is {p90} seconds</p>
                 </div>
