@@ -1,3 +1,4 @@
+import { VictoryChart, VictoryLine, VictoryScatter } from "victory";
 // shameless steal from SO
 const median = (values) => {
     values.sort((a, b) => {
@@ -47,10 +48,23 @@ const sortArr = (arr) => {
 
 const convertToSeconds = (milliseconds) => (milliseconds / 1000).toFixed(2);
 
+const state = {
+    interpolation: "linear",
+};
+
 export default function Results({ data }) {
+    // first do a bit of "statistics"
     const loadTimeData = data.map(({ delay }) => delay);
     const p50 = convertToSeconds(median(loadTimeData));
     const p90 = convertToSeconds(calcQuartile(loadTimeData, 90));
+
+    // now lets get the graph data
+    const graphPoints = data.map(({ delay }, idx) => {
+        // we need to fake the X axis values just so the load times show up
+        // in a regular sequence
+        return { x: idx, y: Number(convertToSeconds(delay)) };
+    });
+    console.log({ graphPoints });
 
     return (
         <div>
@@ -70,6 +84,18 @@ export default function Results({ data }) {
                     </p>
                     <p>your p50 is {p50} seconds</p>
                     <p>your p90 is {p90} seconds</p>
+                    <VictoryChart height={390}>
+                        <VictoryLine
+                            interpolation={state.interpolation}
+                            data={graphPoints}
+                            style={{ data: { stroke: "#c43a31" } }}
+                        />
+                        <VictoryScatter
+                            data={graphPoints}
+                            size={4}
+                            style={{ data: { fill: "#c43a31" } }}
+                        />
+                    </VictoryChart>
                 </div>
             ) : (
                 <p>no data yet!</p>
