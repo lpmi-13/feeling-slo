@@ -48,10 +48,6 @@ const sortArr = (arr) => {
 
 const convertToSeconds = (milliseconds) => (milliseconds / 1000).toFixed(2);
 
-const state = {
-    interpolation: "linear",
-};
-
 export default function Results({ data }) {
     // first do a bit of "statistics"
     const loadTimeData = data.map(({ delay }) => delay);
@@ -64,34 +60,62 @@ export default function Results({ data }) {
         // in a regular sequence
         return { x: idx, y: Number(convertToSeconds(delay)) };
     });
-    console.log({ graphPoints });
+
+    const filterForP50 = ({ y }) => y > p50;
+    const p50GraphPoints = graphPoints.filter(filterForP50);
+    const filterForP90 = ({ y }) => y > p90;
+    const p90GraphPoints = graphPoints.filter(filterForP90);
 
     return (
         <div>
-            <h3>
+            <h1>
                 Based on your swipes, these are the SLOs that you would be
                 satisfied with
-            </h3>
+            </h1>
             {data.length !== 0 ? (
                 <div>
-                    <p>
+                    <h3>
                         The fastest load time was{" "}
                         {convertToSeconds(Math.min(...loadTimeData))} seconds
-                    </p>
-                    <p>
+                    </h3>
+                    <h3>
                         The slowest load time was{" "}
                         {convertToSeconds(Math.max(...loadTimeData))} seconds
-                    </p>
-                    <p>your p50 is {p50} seconds</p>
-                    <p>your p90 is {p90} seconds</p>
+                    </h3>
                     <VictoryChart height={390}>
                         <VictoryLine
-                            interpolation={state.interpolation}
+                            interpolation={"linear"}
                             data={graphPoints}
                             style={{ data: { stroke: "#c43a31" } }}
                         />
                         <VictoryScatter
                             data={graphPoints}
+                            size={4}
+                            style={{ data: { fill: "#c43a31" } }}
+                        />
+                    </VictoryChart>
+                    <h2>your p50 is {p50} seconds</h2>
+                    <VictoryChart height={390}>
+                        <VictoryLine
+                            interpolation={"linear"}
+                            data={p50GraphPoints}
+                            style={{ data: { stroke: "#c43a31" } }}
+                        />
+                        <VictoryScatter
+                            data={p50GraphPoints}
+                            size={4}
+                            style={{ data: { fill: "#c43a31" } }}
+                        />
+                    </VictoryChart>
+                    <h2>your p90 is {p90} seconds</h2>
+                    <VictoryChart height={390}>
+                        <VictoryLine
+                            interpolation={"linear"}
+                            data={p90GraphPoints}
+                            style={{ data: { stroke: "#c43a31" } }}
+                        />
+                        <VictoryScatter
+                            data={p90GraphPoints}
                             size={4}
                             style={{ data: { fill: "#c43a31" } }}
                         />
