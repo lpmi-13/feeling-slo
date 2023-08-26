@@ -1,6 +1,7 @@
 import {
     VictoryChart,
     VictoryLabel,
+    VictoryLegend,
     VictoryLine,
     VictoryScatter,
 } from "victory";
@@ -51,35 +52,37 @@ const sortArr = (arr) => {
     return ary;
 };
 
-const convertToSeconds = (milliseconds) => (milliseconds / 1000).toFixed(2);
+const generateRandomRange = () => {
+    const range = Math.floor(Math.random() * 3000 + 200);
+    return Number((range / 1000).toFixed(2));
+};
 
 export default function Results({ data }) {
-    // first do a bit of "statistics"
-    const loadTimeData = data.map(({ delay }) => delay);
-    const p50 = convertToSeconds(median(loadTimeData));
-    const p90 = convertToSeconds(calcQuartile(loadTimeData, 90));
+    const numberOfFakeDataPoints = Array.from(
+        { length: 100 },
+        (value, idx) => idx
+    );
 
-    // now lets get the graph data
-    const graphPoints = data.map(({ delay }, idx) => {
-        // we need to fake the X axis values just so the load times show up
-        // in a regular sequence
-        return { x: idx, y: Number(convertToSeconds(delay)) };
+    // could probably do this in one line with the above, but it's a hackday!
+    const fakeData = numberOfFakeDataPoints.map((idx) => {
+        return { x: idx, y: generateRandomRange() };
     });
 
-    const filterForP50 = ({ y }) => y > p50;
-    const p50GraphPoints = graphPoints
-        .filter(filterForP50)
-        .map(({ y }, idx) => {
-            // another hack to regenerate the values for the x axis so we can have separate lines
-            return { x: idx, y };
-        });
-    const filterForP90 = ({ y }) => y > p90;
-    const p90GraphPoints = graphPoints
-        .filter(filterForP90)
-        .map(({ y }, idx) => {
-            // same as above
-            return { x: idx, y };
-        });
+    const fakeLoadTimeData = fakeData.map(({ y }) => y);
+    const p50 = median(fakeLoadTimeData);
+    const p90 = calcQuartile(fakeLoadTimeData, 90);
+
+    const filterForP50 = ({ y }) => p50 < y && y < p90;
+    const p50GraphPoints = fakeData.filter(filterForP50).map(({ y }, idx) => {
+        // another hack to regenerate the values for the x axis so we can have separate lines
+        return { x: idx, y };
+    });
+
+    const filterForP90 = ({ y }) => p90 < y;
+    const p90GraphPoints = fakeData.filter(filterForP90).map(({ y }, idx) => {
+        // same as above
+        return { x: idx, y };
+    });
 
     return (
         <div>
@@ -91,33 +94,22 @@ export default function Results({ data }) {
                 <div>
                     <h3>
                         The fastest load time was{" "}
-                        {convertToSeconds(Math.min(...loadTimeData))} seconds
+                        {Math.min(...fakeLoadTimeData)} seconds
                     </h3>
                     <h3>
                         The slowest load time was{" "}
-                        {convertToSeconds(Math.max(...loadTimeData))} seconds
+                        {Math.max(...fakeLoadTimeData)} seconds
                     </h3>
-                    <VictoryChart height={390} title="all load times">
+                    <VictoryChart
+                        domain={{
+                            x: [0, p90GraphPoints.length],
+                            y: [0, Math.max(...fakeLoadTimeData) + 1],
+                        }}
+                        height={390}
+                        title="p50 and p90 load times in seconds"
+                    >
                         <VictoryLabel
-                            text="all load times"
-                            x={225}
-                            y={30}
-                            textAnchor="middle"
-                        />
-                        <VictoryLine
-                            interpolation={"linear"}
-                            data={graphPoints}
-                            style={{ data: { stroke: "green" } }}
-                        />
-                        <VictoryScatter
-                            data={graphPoints}
-                            size={4}
-                            style={{ data: { fill: "green" } }}
-                        />
-                    </VictoryChart>
-                    <VictoryChart height={390}>
-                        <VictoryLabel
-                            text="p50 & p90 load times"
+                            text="load time in seconds"
                             x={225}
                             y={30}
                             textAnchor="middle"
@@ -141,6 +133,21 @@ export default function Results({ data }) {
                             data={p90GraphPoints}
                             size={4}
                             style={{ data: { fill: "red" } }}
+                        />
+                        <VictoryLegend
+                            x={50}
+                            y={50}
+                            centerTitle
+                            orientation="horizontal"
+                            gutter={20}
+                            style={{
+                                border: { stroke: "black" },
+                                title: { fontSize: 20 },
+                            }}
+                            data={[
+                                { name: "p50", symbol: { fill: "blue" } },
+                                { name: "p90", symbol: { fill: "red" } },
+                            ]}
                         />
                     </VictoryChart>
                 </div>
