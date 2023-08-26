@@ -1,4 +1,9 @@
-import { VictoryChart, VictoryLine, VictoryScatter } from "victory";
+import {
+    VictoryChart,
+    VictoryLabel,
+    VictoryLine,
+    VictoryScatter,
+} from "victory";
 // shameless steal from SO
 const median = (values) => {
     values.sort((a, b) => {
@@ -62,9 +67,19 @@ export default function Results({ data }) {
     });
 
     const filterForP50 = ({ y }) => y > p50;
-    const p50GraphPoints = graphPoints.filter(filterForP50);
+    const p50GraphPoints = graphPoints
+        .filter(filterForP50)
+        .map(({ y }, idx) => {
+            // another hack to regenerate the values for the x axis so we can have separate lines
+            return { x: idx, y };
+        });
     const filterForP90 = ({ y }) => y > p90;
-    const p90GraphPoints = graphPoints.filter(filterForP90);
+    const p90GraphPoints = graphPoints
+        .filter(filterForP90)
+        .map(({ y }, idx) => {
+            // same as above
+            return { x: idx, y };
+        });
 
     return (
         <div>
@@ -82,42 +97,50 @@ export default function Results({ data }) {
                         The slowest load time was{" "}
                         {convertToSeconds(Math.max(...loadTimeData))} seconds
                     </h3>
-                    <VictoryChart height={390}>
+                    <VictoryChart height={390} title="all load times">
+                        <VictoryLabel
+                            text="all load times"
+                            x={225}
+                            y={30}
+                            textAnchor="middle"
+                        />
                         <VictoryLine
                             interpolation={"linear"}
                             data={graphPoints}
-                            style={{ data: { stroke: "#c43a31" } }}
+                            style={{ data: { stroke: "green" } }}
                         />
                         <VictoryScatter
                             data={graphPoints}
                             size={4}
-                            style={{ data: { fill: "#c43a31" } }}
+                            style={{ data: { fill: "green" } }}
                         />
                     </VictoryChart>
-                    <h2>your p50 is {p50} seconds</h2>
                     <VictoryChart height={390}>
+                        <VictoryLabel
+                            text="p50 & p90 load times"
+                            x={225}
+                            y={30}
+                            textAnchor="middle"
+                        />
                         <VictoryLine
                             interpolation={"linear"}
                             data={p50GraphPoints}
-                            style={{ data: { stroke: "#c43a31" } }}
+                            style={{ data: { stroke: "blue" } }}
                         />
                         <VictoryScatter
                             data={p50GraphPoints}
                             size={4}
-                            style={{ data: { fill: "#c43a31" } }}
+                            style={{ data: { fill: "blue" } }}
                         />
-                    </VictoryChart>
-                    <h2>your p90 is {p90} seconds</h2>
-                    <VictoryChart height={390}>
                         <VictoryLine
                             interpolation={"linear"}
                             data={p90GraphPoints}
-                            style={{ data: { stroke: "#c43a31" } }}
+                            style={{ data: { stroke: "red" } }}
                         />
                         <VictoryScatter
                             data={p90GraphPoints}
                             size={4}
-                            style={{ data: { fill: "#c43a31" } }}
+                            style={{ data: { fill: "red" } }}
                         />
                     </VictoryChart>
                 </div>
