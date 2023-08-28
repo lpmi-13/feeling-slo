@@ -63,6 +63,13 @@ export default function Results({ data }) {
         (value, idx) => idx
     );
 
+    const tooSlowLoadTimes = data
+        .filter(({ fastEnough }) => !fastEnough)
+        .map(({ delay }) => delay);
+
+    // this is value we want to set as the lower bound for calcuating the SLO
+    const slowestUnhappyLoadTime = Math.min(...tooSlowLoadTimes);
+
     // could probably do this in one line with the above, but it's a hackday!
     const fakeData = numberOfFakeDataPoints.map((idx) => {
         return { x: idx, y: generateRandomRange() };
@@ -83,6 +90,15 @@ export default function Results({ data }) {
         // same as above
         return { x: idx, y };
     });
+
+    const filterForSlowestUnhappyLoadTime = ({ y }) =>
+        Number(slowestUnhappyLoadTime / 1000).toFixed(2) > y;
+
+    const goodFakeDataLoads = fakeData.filter(filterForSlowestUnhappyLoadTime);
+
+    const percentageOfLoadTimeBelowSLO = Math.floor(
+        (goodFakeDataLoads.length / fakeData.length) * 100
+    );
 
     return (
         <div>
@@ -150,6 +166,13 @@ export default function Results({ data }) {
                             ]}
                         />
                     </VictoryChart>
+                    <p>
+                        this is the percent of load times that were faster than
+                        the slowest time the user was unhappy about:{" "}
+                        {Number(slowestUnhappyLoadTime / 1000).toFixed(2)}{" "}
+                        seconds
+                    </p>
+                    <p>{percentageOfLoadTimeBelowSLO}%</p>
                 </div>
             ) : (
                 <p>no data yet!</p>
