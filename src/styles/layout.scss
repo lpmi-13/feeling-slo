@@ -14,5 +14,16 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 3em;
+    margin-top: 3em;
+}
+
+.interaction {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5em;
+}
+
+.loadingOutline {
+    outline: 4px solid blue;
+    border-radius: 2em;
 }
