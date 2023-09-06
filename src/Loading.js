@@ -17,18 +17,13 @@ export default function Loading({ addData, currentDelay, handleIncrement }) {
     }, [currentProgress]);
 
     const advanceLoadingBar = () => {
-        let stepCount = 0;
-        if (stepCount >= 10) {
-            return;
-        }
         // this is how long each of the 10 steps is going to be...might tweak that
         // if it needs to be smoother/rougher
-        const stepLength = currentDelay / 10;
+        const stepLength = Math.floor(currentDelay / 10);
         const tick = () => {
             setCurrentProgress(
                 currentProgress >= 100 ? currentProgress : currentProgress + 10
             );
-            stepCount += 1;
             clearInterval(stepId);
         };
         const stepId = setInterval(tick, stepLength);
@@ -37,18 +32,20 @@ export default function Loading({ addData, currentDelay, handleIncrement }) {
     const reloadOnSlow = () => {
         handleIncrement();
         addData(currentDelay, false);
+        setCurrentProgress(0);
         setLoading(true);
     };
 
     const reloadOnFast = () => {
         handleIncrement();
         addData(currentDelay, true);
+        setCurrentProgress(0);
         setLoading(true);
     };
 
     return (
         <div className="interaction">
-            <h1>This is main landing page...did it load fast enough?</h1>
+            <h1>This is the main landing page...did it load fast enough?</h1>
             <div className="loadingOutline">
                 <LoadingBar currentProgress={currentProgress} />
             </div>

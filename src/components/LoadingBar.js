@@ -12,7 +12,6 @@ const Bar = styled.div`
     );
 `;
 const LoadingBar = ({ currentProgress }) => {
-    //Width State
     return <Bar style={{ width: currentProgress + "%" }}></Bar>;
 };
 export default LoadingBar;
