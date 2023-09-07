@@ -11,12 +11,12 @@ export default function Loading({ addData, currentDelay, handleIncrement }) {
         setTimeout(() => {
             setLoading(false);
         }, currentDelay);
-    }, [currentDelay, loading]);
+    }, [currentDelay]);
 
     const incrementStep = useCallback(() => {
         setCurrentStep((currentStep) => currentStep + 1);
         setCurrentProgress((currentProgress) => currentProgress + 10);
-    }, [currentProgress]);
+    }, []);
 
     useEffect(() => {
         if (currentStep >= 10) {
@@ -26,12 +26,10 @@ export default function Loading({ addData, currentDelay, handleIncrement }) {
         // this is how long each of the 10 steps is going to be...might tweak that
         // if it needs to be smoother/rougher
         const stepLength = Math.floor(currentDelay / 10);
-        console.log(`current delay is ${currentDelay}`);
-        console.log(`and using a step length of ${stepLength}`);
         const timeoutFunction = setInterval(incrementStep, stepLength);
 
         return () => clearInterval(timeoutFunction);
-    }, [incrementStep, currentDelay]);
+    }, [currentDelay, currentStep, incrementStep]);
 
     // should refactor these into one function that takes a param
     const reloadOnSlow = () => {

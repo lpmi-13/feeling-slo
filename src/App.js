@@ -20,10 +20,10 @@ const addData = (delay, fastEnough) => {
 
 function App() {
     const [dataPoints, setDataPoints] = useState(0);
-    const [currentDelay, setCurrentDelay] = useState(generateRandomDelay());
+    const [currentDelay, setCurrentDelay] = useState(generateRandomDelay);
 
     const incrementDataPointsCounter = () => {
-        setCurrentDelay(generateRandomDelay());
+        setCurrentDelay(generateRandomDelay);
         setDataPoints(dataPoints + 1);
     };
 
