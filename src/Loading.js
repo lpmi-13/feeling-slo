@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import LoadingBar from "./components/LoadingBar";
 
 export default function Loading({ addData, currentDelay, handleIncrement }) {
     const [loading, setLoading] = useState(true);
     const [currentProgress, setCurrentProgress] = useState(0);
+    const [currentStep, setCurrentStep] = useState(0);
 
     useEffect(() => {
         setTimeout(() => {
@@ -12,27 +13,32 @@ export default function Loading({ addData, currentDelay, handleIncrement }) {
         }, currentDelay);
     }, [currentDelay, loading]);
 
-    useEffect(() => {
-        advanceLoadingBar();
+    const incrementStep = useCallback(() => {
+        setCurrentStep((currentStep) => currentStep + 1);
+        setCurrentProgress((currentProgress) => currentProgress + 10);
     }, [currentProgress]);
 
-    const advanceLoadingBar = () => {
+    useEffect(() => {
+        if (currentStep >= 10) {
+            return;
+        }
+
         // this is how long each of the 10 steps is going to be...might tweak that
         // if it needs to be smoother/rougher
         const stepLength = Math.floor(currentDelay / 10);
-        const tick = () => {
-            setCurrentProgress(
-                currentProgress >= 100 ? currentProgress : currentProgress + 10
-            );
-            clearInterval(stepId);
-        };
-        const stepId = setInterval(tick, stepLength);
-    };
+        console.log(`current delay is ${currentDelay}`);
+        console.log(`and using a step length of ${stepLength}`);
+        const timeoutFunction = setInterval(incrementStep, stepLength);
 
+        return () => clearInterval(timeoutFunction);
+    }, [incrementStep, currentDelay]);
+
+    // should refactor these into one function that takes a param
     const reloadOnSlow = () => {
         handleIncrement();
         addData(currentDelay, false);
         setCurrentProgress(0);
+        setCurrentStep(0);
         setLoading(true);
     };
 
@@ -40,6 +46,7 @@ export default function Loading({ addData, currentDelay, handleIncrement }) {
         handleIncrement();
         addData(currentDelay, true);
         setCurrentProgress(0);
+        setCurrentStep(0);
         setLoading(true);
     };
 
