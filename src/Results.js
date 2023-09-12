@@ -6,7 +6,7 @@ import {
     VictoryScatter,
 } from "victory";
 
-const NUMBER_OF_DATA_POINTS_TO_GENERATE = 100;
+const NUMBER_OF_DATA_POINTS_TO_GENERATE = 200;
 
 // shameless steal from SO
 const median = (values) => {
