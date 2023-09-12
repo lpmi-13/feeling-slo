@@ -5,6 +5,9 @@ import {
     VictoryLine,
     VictoryScatter,
 } from "victory";
+
+const NUMBER_OF_DATA_POINTS_TO_GENERATE = 100;
+
 // shameless steal from SO
 const median = (values) => {
     values.sort((a, b) => {
@@ -59,7 +62,7 @@ const generateRandomRange = () => {
 
 export default function Results({ data }) {
     const numberOfFakeDataPoints = Array.from(
-        { length: 100 },
+        { length: NUMBER_OF_DATA_POINTS_TO_GENERATE },
         (value, idx) => idx
     );
 
