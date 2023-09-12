@@ -6,7 +6,7 @@ import {
     VictoryScatter,
 } from "victory";
 
-const NUMBER_OF_DATA_POINTS_TO_GENERATE = 200;
+const NUMBER_OF_DATA_POINTS_TO_GENERATE = 500;
 
 // shameless steal from SO
 const median = (values) => {
@@ -106,7 +106,7 @@ export default function Results({ data }) {
     return (
         <div>
             <h1>
-                Based on your swipes, these are the SLOs that you would be
+                Based on your choices, these are the SLOs that you would be
                 satisfied with
             </h1>
             {data.length !== 0 ? (
