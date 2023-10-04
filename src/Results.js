@@ -72,11 +72,11 @@ const generateRandomRange = () => {
 
 // this is the same fuction used in App.js, so we'll pull them both out into a utilities file or something
 const generateDelayInRange = (longest, shortest) => {
-    return Math.floor(Math.random() * longest + shortest);
+    return Math.floor(Math.random() * (longest - shortest + 1) + shortest);
 };
 
 const generateDataPoints = (number, startRange, endRange) => {
-    const fakeDataPoints = Array.from({ length: number }, (value, idx) =>
+    const fakeDataPoints = Array.from({ length: number }, (value) =>
         generateDelayInRange(endRange, startRange)
     );
     return fakeDataPoints;
