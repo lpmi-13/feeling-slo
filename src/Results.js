@@ -6,76 +6,19 @@ import {
     VictoryScatter,
 } from "victory";
 
+import { calcQuartile, generateDataPoints, median, shuffleArray } from "./util";
+
 const NUMBER_OF_DATA_POINTS_TO_GENERATE = 500;
-
-// shameless steal from SO
-const median = (values) => {
-    values.sort((a, b) => {
-        return a - b;
-    });
-
-    const half = Math.floor(values.length / 2);
-
-    if (values.length % 2) return values[half];
-
-    return (values[half - 1] + values[half]) / 2.0;
-};
-
-const calcQuartile = (arr, q) => {
-    const a = arr.slice();
-    // Turn q into a decimal (e.g. 95 becomes 0.95)
-    q = q / 100;
-
-    // Sort the array into ascending order
-    const data = sortArr(a);
-
-    // Work out the position in the array of the percentile point
-    const p = (data.length - 1) * q;
-    const b = Math.floor(p);
-
-    // Work out what we rounded off (if anything)
-    const remainder = p - b;
-
-    // See whether that data exists directly
-    if (data[b + 1] !== undefined) {
-        return (
-            parseFloat(data[b]) +
-            remainder * (parseFloat(data[b + 1]) - parseFloat(data[b]))
-        );
-    } else {
-        return parseFloat(data[b]);
-    }
-};
-
-const sortArr = (arr) => {
-    var ary = arr.slice();
-    ary.sort((a, b) => {
-        return parseFloat(a) - parseFloat(b);
-    });
-    return ary;
-};
 
 // we want to have a distribution of different load times with a fairly long tail of high load times.
 // so to make the math easy (cause I couldn't find a good way to generate a gaussian distribution with long tails)
-// we're going to generate 1,000 random load times, and have the following basic sub-distributions:
-// 50 load times between 2,000-3,000 ms (5% of the data)
-// 100 load times between 1,500-2,000 ms (10% of the data)
-// 150 load times between 1,200-1,500 ms (15% of the data)
-// 500 load times between 800-1,200 ms (50% of the data)
-// 150 load times between 500-800 ms (15% of the data)
-// 50 load times between 200-500 ms (5% of the data)
-
-// this is the same fuction used in App.js, so we'll pull them both out into a utilities file or something
-const generateDelayInRange = (longest, shortest) => {
-    return Math.floor(Math.random() * (longest - shortest + 1) + shortest);
-};
-
-const generateDataPoints = (number, startRange, endRange) => {
-    const fakeDataPoints = Array.from({ length: number }, (value) =>
-        generateDelayInRange(endRange, startRange)
-    );
-    return fakeDataPoints;
-};
+// we're going to generate N random load times, and have the following basic sub-distributions:
+// load times between 2,000-3,000 ms (5% of the data)
+// load times between 1,500-2,000 ms (10% of the data)
+// load times between 1,200-1,500 ms (15% of the data)
+// load times between 800-1,200 ms (50% of the data)
+// load times between 500-800 ms (15% of the data)
+// load times between 200-500 ms (5% of the data)
 
 // load times between 2,000-3,000 ms (5% of the data)
 const verySlowLoadTimes = generateDataPoints(
@@ -129,14 +72,6 @@ const fullValues = verySlowLoadTimes.concat(
 );
 
 // and now we want to shuffle the values completely randomly, to simulate a real load time graph
-// ...and a good opportunity to steal from SO, particularly because this algorithm is called the Durstenfeld Shuffle
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
 shuffleArray(fullValues);
 
 // and for the last transformation, we just need to give all the load times an X coordinate so we can plot them
@@ -145,46 +80,61 @@ const fakeGraphData = fullValues.map((value, idx) => {
 });
 
 export default function Results({ data }) {
-    const numberOfFakeDataPoints = Array.from(
-        { length: NUMBER_OF_DATA_POINTS_TO_GENERATE },
-        (value, idx) => idx
-    );
-
     const tooSlowLoadTimes = data
         .filter(({ fastEnough }) => !fastEnough)
         .map(({ delay }) => delay);
 
-    // this is value we want to set as the lower bound for calcuating the SLO
+    // this is the value we need for the "strict" SLO, where we want to set it to try and
+    // avoid all user unhappiness
     const slowestUnhappyLoadTime = Math.min(...tooSlowLoadTimes);
 
-    // could probably do this in one line with the above, but it's a hackday!
-    const fakeData = numberOfFakeDataPoints.map((idx) => {
-        return { x: idx, y: generateRandomRange() };
-    });
+    // this is the value we need if we want to be a bit more lenient and set it to try
+    // and approximate an average value for what makes the user unhappy
+    const averageTooSlowLoadTime = Math.floor(
+        tooSlowLoadTimes.reduce((acc, val) => {
+            return acc + val;
+        }, 0) / tooSlowLoadTimes.length
+    );
 
-    const fakeLoadTimeData = fakeData.map(({ y }) => y);
+    const fakeLoadTimeData = fakeGraphData.map(({ y }) => y);
     const p50 = median(fakeLoadTimeData);
     const p90 = calcQuartile(fakeLoadTimeData, 90);
 
     const filterForP50 = ({ y }) => p50 < y && y < p90;
-    const p50GraphPoints = fakeData.filter(filterForP50).map(({ y }, idx) => {
-        // another hack to regenerate the values for the x axis so we can have separate lines
-        return { x: idx, y };
-    });
+    const p50GraphPoints = fakeGraphData
+        .filter(filterForP50)
+        .map(({ y }, idx) => {
+            // another hack to regenerate the values for the x axis so we can have separate lines
+            return { x: idx, y };
+        });
 
     const filterForP90 = ({ y }) => p90 < y;
-    const p90GraphPoints = fakeData.filter(filterForP90).map(({ y }, idx) => {
-        // same as above
-        return { x: idx, y };
-    });
+    const p90GraphPoints = fakeGraphData
+        .filter(filterForP90)
+        .map(({ y }, idx) => {
+            // same as above
+            return { x: idx, y };
+        });
 
-    const filterForSlowestUnhappyLoadTime = ({ y }) =>
-        Number(slowestUnhappyLoadTime / 1000).toFixed(2) > y;
+    const filterForStrictUserHappiness = ({ y }) => slowestUnhappyLoadTime > y;
+    const filterForLenientUserHappiness = ({ y }) => averageTooSlowLoadTime > y;
 
-    const goodFakeDataLoads = fakeData.filter(filterForSlowestUnhappyLoadTime);
+    // strictly filter out all loads slower than the fastest load that made a user unhappy
+    const goodFakeDataLoads = fakeGraphData.filter(
+        filterForStrictUserHappiness
+    );
 
-    const percentageOfLoadTimeBelowSLO = Math.floor(
-        (goodFakeDataLoads.length / fakeData.length) * 100
+    const percentageOfLoadTimesBelowStrictSLO = Math.floor(
+        (goodFakeDataLoads.length / fakeGraphData.length) * 100
+    );
+
+    // filter out all loads slower than the average load time that made users unhappy
+    const okayFakeDataLoads = fakeGraphData.filter(
+        filterForLenientUserHappiness
+    );
+
+    const percentageOfLoadTimesBelowLenientSLO = Math.floor(
+        (okayFakeDataLoads.length / fakeGraphData.length) * 100
     );
 
     return (
@@ -254,12 +204,19 @@ export default function Results({ data }) {
                         />
                     </VictoryChart>
                     <p>
-                        SLO should be "{percentageOfLoadTimeBelowSLO}% of load
-                        times should be faster than{" "}
+                        If SLO is based on the fastest "unacceptable" load time,
+                        SLO should be "{percentageOfLoadTimesBelowStrictSLO}% of
+                        load times should be faster than{" "}
                         {Number(slowestUnhappyLoadTime / 1000).toFixed(2)}{" "}
                         seconds"
                     </p>
-                    <p>{percentageOfLoadTimeBelowSLO}%</p>
+                    <p>
+                        if SLO is based on the average "unacceptable" load time,
+                        SLO should be "{percentageOfLoadTimesBelowLenientSLO}%
+                        of load times should be faster than{" "}
+                        {Number(averageTooSlowLoadTime / 1000).toFixed(2)}{" "}
+                        seconds"
+                    </p>
                 </div>
             ) : (
                 <p>no data yet!</p>
