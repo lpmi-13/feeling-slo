@@ -55,11 +55,6 @@ const sortArr = (arr) => {
     return ary;
 };
 
-const generateRandomRange = () => {
-    const range = Math.floor(Math.random() * 3000 + 200);
-    return Number((range / 1000).toFixed(2));
-};
-
 // we want to have a distribution of different load times with a fairly long tail of high load times.
 // so to make the math easy (cause I couldn't find a good way to generate a gaussian distribution with long tails)
 // we're going to generate 1,000 random load times, and have the following basic sub-distributions:
@@ -82,23 +77,47 @@ const generateDataPoints = (number, startRange, endRange) => {
     return fakeDataPoints;
 };
 
-// 50 load times between 2,000-3,000 ms (5% of the data)
-const verySlowLoadTimes = generateDataPoints(50, 2000, 3000);
+// load times between 2,000-3,000 ms (5% of the data)
+const verySlowLoadTimes = generateDataPoints(
+    NUMBER_OF_DATA_POINTS_TO_GENERATE * 0.05,
+    2000,
+    3000
+);
 
-// 100 load times between 1,500-2,000 ms (10% of the data)
-const fairlySlowLoadTimes = generateDataPoints(100, 1500, 2000);
+// load times between 1,500-2,000 ms (10% of the data)
+const fairlySlowLoadTimes = generateDataPoints(
+    NUMBER_OF_DATA_POINTS_TO_GENERATE * 0.1,
+    1500,
+    2000
+);
 
-// 150 load times between 1,200-1,500 ms (15% of the data)
-const slowLoadTimes = generateDataPoints(150, 1200, 1500);
+// load times between 1,200-1,500 ms (15% of the data)
+const slowLoadTimes = generateDataPoints(
+    NUMBER_OF_DATA_POINTS_TO_GENERATE * 0.15,
+    1200,
+    1500
+);
 
-// 500 load times between 800-1,200 ms (50% of the data)
-const normalLoadTimes = generateDataPoints(500, 800, 1200);
+// load times between 800-1,200 ms (50% of the data)
+const normalLoadTimes = generateDataPoints(
+    NUMBER_OF_DATA_POINTS_TO_GENERATE * 0.5,
+    800,
+    1200
+);
 
-// 150 load times between 500-800 ms (15% of the data)
-const fastLoadTimes = generateDataPoints(150, 500, 800);
+// load times between 500-800 ms (15% of the data)
+const fastLoadTimes = generateDataPoints(
+    NUMBER_OF_DATA_POINTS_TO_GENERATE * 0.15,
+    500,
+    800
+);
 
-// 50 load times between 200-500 ms (5% of the data)
-const veryFastLoadTimes = generateDataPoints(50, 200, 500);
+// load times between 200-500 ms (5% of the data)
+const veryFastLoadTimes = generateDataPoints(
+    NUMBER_OF_DATA_POINTS_TO_GENERATE * 0.05,
+    200,
+    500
+);
 
 // now we have a bunch of arrays with varying load times, so we put them all together
 const fullValues = verySlowLoadTimes.concat(
