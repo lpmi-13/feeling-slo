@@ -51,6 +51,10 @@ export default function Loading({ addData, currentDelay, handleIncrement }) {
     return (
         <div className="interaction">
             <h1>This is the main landing page...did it load fast enough?</h1>
+            <p>
+                When you've picked 3 loading times that are too slow, you can
+                see the results
+            </p>
             <div className="loadingOutline">
                 <LoadingBar currentProgress={currentProgress} />
             </div>

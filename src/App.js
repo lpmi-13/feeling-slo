@@ -15,19 +15,23 @@ const addData = (delay, fastEnough) => {
 };
 
 function App() {
-    const [dataPoints, setDataPoints] = useState(0);
     const [currentDelay, setCurrentDelay] = useState(generateRandomDelay);
+
+    // we only count the times when the user specified "not fast enough" because that's what
+    // we need to calculate potential SLOs. We don't care about when the users are happy as
+    // much as we care about what makes the users unhappy.
+    const numberOfDataPoints = loadingTimes.filter(
+        ({ fastEnough }) => fastEnough === false
+    ).length;
 
     const incrementDataPointsCounter = () => {
         setCurrentDelay(generateRandomDelay);
-        setDataPoints(dataPoints + 1);
     };
 
     return (
         <div className="App">
             <Router>
-                <Layout>
-                    <div>current data points: {dataPoints}</div>
+                <Layout dataPoints={numberOfDataPoints}>
                     <Routes>
                         <Route index path="/" element={<Home />} />
                         <Route
