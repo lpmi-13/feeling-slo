@@ -6,6 +6,8 @@ import {
     VictoryScatter,
 } from "victory";
 
+import LoadingGraph from "./components/LoadingGraph";
+
 import { calcQuartile, generateDataPoints, median, shuffleArray } from "./util";
 
 const NUMBER_OF_DATA_POINTS_TO_GENERATE = 500;
@@ -153,56 +155,7 @@ export default function Results({ data }) {
                         The slowest load time was{" "}
                         {Math.max(...fakeLoadTimeData)} seconds
                     </h3>
-                    <VictoryChart
-                        domain={{
-                            x: [0, p90GraphPoints.length],
-                            y: [0, Math.max(...fakeLoadTimeData) + 1],
-                        }}
-                        height={390}
-                        title="p50 and p90 load times in seconds"
-                    >
-                        <VictoryLabel
-                            text="load time in seconds"
-                            x={225}
-                            y={30}
-                            textAnchor="middle"
-                        />
-                        <VictoryLine
-                            interpolation={"linear"}
-                            data={p50GraphPoints}
-                            style={{ data: { stroke: "blue" } }}
-                        />
-                        <VictoryScatter
-                            data={p50GraphPoints}
-                            size={4}
-                            style={{ data: { fill: "blue" } }}
-                        />
-                        <VictoryLine
-                            interpolation={"linear"}
-                            data={p90GraphPoints}
-                            style={{ data: { stroke: "red" } }}
-                        />
-                        <VictoryScatter
-                            data={p90GraphPoints}
-                            size={4}
-                            style={{ data: { fill: "red" } }}
-                        />
-                        <VictoryLegend
-                            x={50}
-                            y={50}
-                            centerTitle
-                            orientation="horizontal"
-                            gutter={20}
-                            style={{
-                                border: { stroke: "black" },
-                                title: { fontSize: 20 },
-                            }}
-                            data={[
-                                { name: "p50", symbol: { fill: "blue" } },
-                                { name: "p90", symbol: { fill: "red" } },
-                            ]}
-                        />
-                    </VictoryChart>
+                    <LoadingGraph data={fakeGraphData} />
                     <p>
                         If SLO is based on the fastest "unacceptable" load time,
                         SLO should be "{percentageOfLoadTimesBelowStrictSLO}% of
