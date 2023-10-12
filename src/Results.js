@@ -1,11 +1,3 @@
-import {
-    VictoryChart,
-    VictoryLabel,
-    VictoryLegend,
-    VictoryLine,
-    VictoryScatter,
-} from "victory";
-
 import LoadingGraph from "./components/LoadingGraph";
 
 import { calcQuartile, generateDataPoints, median, shuffleArray } from "./util";
