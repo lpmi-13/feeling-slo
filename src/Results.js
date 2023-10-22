@@ -1,6 +1,6 @@
 import LoadingGraph from "./components/LoadingGraph";
 
-import { calcQuartile, generateDataPoints, median, shuffleArray } from "./util";
+import { generateDataPoints, shuffleArray } from "./util";
 
 const NUMBER_OF_DATA_POINTS_TO_GENERATE = 500;
 
@@ -94,24 +94,6 @@ export default function Results({ data }) {
     );
 
     const fakeLoadTimeData = fakeGraphData.map(({ y }) => y);
-    const p50 = median(fakeLoadTimeData);
-    const p90 = calcQuartile(fakeLoadTimeData, 90);
-
-    const filterForP50 = ({ y }) => p50 < y && y < p90;
-    const p50GraphPoints = fakeGraphData
-        .filter(filterForP50)
-        .map(({ y }, idx) => {
-            // another hack to regenerate the values for the x axis so we can have separate lines
-            return { x: idx, y };
-        });
-
-    const filterForP90 = ({ y }) => p90 < y;
-    const p90GraphPoints = fakeGraphData
-        .filter(filterForP90)
-        .map(({ y }, idx) => {
-            // same as above
-            return { x: idx, y };
-        });
 
     const filterForStrictUserHappiness = ({ y }) => slowestUnhappyLoadTime > y;
     const filterForLenientUserHappiness = ({ y }) => averageTooSlowLoadTime > y;
