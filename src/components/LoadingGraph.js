@@ -1,7 +1,7 @@
 import { Chart } from "react-google-charts";
 
 export const defaultData = [
-    ["Observations", "Load times in milliseconds", "strict SLO", "lenient SLO"],
+    ["Observations", "Load times in milliseconds", "lenient SLO", "strict SLO"],
 ];
 
 export const options = {

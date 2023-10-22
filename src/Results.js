@@ -138,17 +138,17 @@ export default function Results({ data }) {
                         averageUnhappy={averageTooSlowLoadTime}
                     />
                     <p>
-                        If SLO is based on the fastest "unacceptable" load time,
-                        SLO should be "{percentageOfLoadTimesBelowStrictSLO}% of
-                        load times should be faster than{" "}
-                        {Number(slowestUnhappyLoadTime / 1000).toFixed(2)}{" "}
-                        seconds"
-                    </p>
-                    <p>
                         if SLO is based on the average "unacceptable" load time,
                         SLO should be "{percentageOfLoadTimesBelowLenientSLO}%
                         of load times should be faster than{" "}
                         {Number(averageTooSlowLoadTime / 1000).toFixed(2)}{" "}
+                        seconds"
+                    </p>
+                    <p>
+                        If SLO is based on the fastest "unacceptable" load time,
+                        SLO should be "{percentageOfLoadTimesBelowStrictSLO}% of
+                        load times should be faster than{" "}
+                        {Number(slowestUnhappyLoadTime / 1000).toFixed(2)}{" "}
                         seconds"
                     </p>
                 </div>
