@@ -68,10 +68,13 @@ const fullValues = verySlowLoadTimes.concat(
 // and now we want to shuffle the values completely randomly, to simulate a real load time graph
 shuffleArray(fullValues);
 
-// and for the last transformation, we just need to give all the load times an X coordinate so we can plot them
+// we're gonna refactor out the x/y stuff, since our new graph implementation doesn't need it
 const fakeGraphData = fullValues.map((value, idx) => {
     return { x: idx, y: value };
 });
+
+// we'll eventually just unify this and fakeGraphData to remove x/y stuff once everything is wired up and working
+const simpleFakeGraphData = fullValues.map((value, idx) => [idx, value]);
 
 export default function Results({ data }) {
     const tooSlowLoadTimes = data
@@ -137,7 +140,7 @@ export default function Results({ data }) {
                 Based on your choices, these are the SLOs that you would be
                 satisfied with
             </h1>
-            {data.length !== 0 ? (
+            {data.length >= 3 ? (
                 <div>
                     <h3>
                         The fastest load time was{" "}
@@ -147,7 +150,11 @@ export default function Results({ data }) {
                         The slowest load time was{" "}
                         {Math.max(...fakeLoadTimeData)} seconds
                     </h3>
-                    <LoadingGraph data={fakeGraphData} />
+                    <LoadingGraph
+                        data={simpleFakeGraphData}
+                        slowestUnhappy={slowestUnhappyLoadTime}
+                        averageUnhappy={averageTooSlowLoadTime}
+                    />
                     <p>
                         If SLO is based on the fastest "unacceptable" load time,
                         SLO should be "{percentageOfLoadTimesBelowStrictSLO}% of

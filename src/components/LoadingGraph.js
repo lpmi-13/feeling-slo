@@ -1,6 +1,8 @@
 import { Chart } from "react-google-charts";
 
-export const defaultData = [["Observations", "Load times in milliseconds"]];
+export const defaultData = [
+    ["Observations", "Load times in milliseconds", "strict SLO", "lenient SLO"],
+];
 
 export const options = {
     chart: {
@@ -8,13 +10,19 @@ export const options = {
     },
 };
 
-const LoadingGraph = ({ data }) => {
+const LoadingGraph = ({ averageUnhappy, data, slowestUnhappy }) => {
+    // hack it!
+    let modifiedData = [];
+    data.forEach(([index, value]) => {
+        modifiedData.push([index, value, slowestUnhappy, averageUnhappy]);
+    });
+
     return (
         <Chart
             chartType="Line"
             width="100%"
             height="400px"
-            data={[...defaultData, data]}
+            data={defaultData.concat(modifiedData)}
             options={options}
         />
     );
