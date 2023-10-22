@@ -118,20 +118,8 @@ export default function Results({ data }) {
 
     return (
         <div>
-            <h1>
-                Based on your choices, these are the SLOs that you would be
-                satisfied with
-            </h1>
             {data.length >= 3 ? (
                 <div>
-                    <h3>
-                        The fastest load time was{" "}
-                        {Math.min(...fakeLoadTimeData)} seconds
-                    </h3>
-                    <h3>
-                        The slowest load time was{" "}
-                        {Math.max(...fakeLoadTimeData)} seconds
-                    </h3>
                     <LoadingGraph
                         data={simpleFakeGraphData}
                         slowestUnhappy={slowestUnhappyLoadTime}
