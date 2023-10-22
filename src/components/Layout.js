@@ -11,7 +11,7 @@ const Layout = ({ children, dataPoints }) => {
                     whileTap={{ scale: 0.9 }}
                     aria-label="home"
                 >
-                    <Link to="/">home</Link>
+                    <Link to="/">Home</Link>
                 </motion.button>
                 <motion.button
                     whileHover={{ scale: 1.1 }}

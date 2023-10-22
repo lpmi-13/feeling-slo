@@ -27,8 +27,9 @@ export default function Home() {
                 <p>
                     Based on these clicks, we'll generate a few example SLOs
                     that would be relevant given the sample data set (a bunch of
-                    randomly generated load times) and your responses to the
-                    actual loading speed you experienced.
+                    randomly generated load times between 200 - 3,000
+                    milliseconds) and your responses to the actual loading speed
+                    you experienced.
                 </p>
                 <p>
                     As a simple example, if the average load speed you were
