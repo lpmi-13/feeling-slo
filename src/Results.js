@@ -93,8 +93,6 @@ export default function Results({ data }) {
         }, 0) / tooSlowLoadTimes.length
     );
 
-    const fakeLoadTimeData = fakeGraphData.map(({ y }) => y);
-
     const filterForStrictUserHappiness = ({ y }) => slowestUnhappyLoadTime > y;
     const filterForLenientUserHappiness = ({ y }) => averageTooSlowLoadTime > y;
 
