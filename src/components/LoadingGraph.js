@@ -14,7 +14,7 @@ const LoadingGraph = ({ averageUnhappy, data, slowestUnhappy }) => {
     // hack it!
     let modifiedData = [];
     data.forEach(([index, value]) => {
-        modifiedData.push([index, value, slowestUnhappy, averageUnhappy]);
+        modifiedData.push([index, value, averageUnhappy, slowestUnhappy]);
     });
 
     return (

@@ -26,7 +26,7 @@ export default function Home() {
                 </p>
                 <p>
                     Based on these clicks, we'll generate a few example SLOs
-                    that would be relevant given the sample data set (500
+                    that would be relevant given the sample data set (a bunch of
                     randomly generated load times) and your responses to the
                     actual loading speed you experienced.
                 </p>
@@ -36,29 +36,6 @@ export default function Home() {
                     included load times that were faster than that, you might
                     set an SLO like: "80% of page loads are faster than 2
                     seconds"
-                </p>
-                <p>
-                    For a more complicated example, we can take the total data
-                    points where the user indicated the page load speed was too
-                    slow and convert that into quartiles (this is obviously
-                    easier with more data points, so we'll probably wanna
-                    somehow prompt that this analysis isn't ready until the user
-                    clicks enough times). We can then say things like: 1.5
-                    seconds was faster than 50% of the loading speeds the user
-                    was unhappy with, 1 second was faster than 90% of the
-                    loading speeds the user was unhappy with, and 900
-                    milliseconds was faster than 95% of the loading speeds the
-                    user was unhappy with.
-                </p>
-                <p>
-                    We could also provide an analysis (which isn't, strictly
-                    speaking, on SLOs) like: we can see that 60% of the
-                    responses made the user happy and 40% of the responses made
-                    the user unhappy. You would need to improve the average
-                    speed of the site by 300 milliseconds to improve user
-                    happiness by 5%, 750 milliseconds to improve user happiness
-                    by 15%, and 1200 milliseconds to improve user happiness by
-                    20%.
                 </p>
             </div>
         </div>
