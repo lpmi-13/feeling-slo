@@ -50,7 +50,7 @@ export default function Loading({ addData, currentDelay, handleIncrement }) {
 
     return (
         <div className="interaction">
-            <h1>This is the main landing page...did it load fast enough?</h1>
+            <h2>This is the main landing page...did it load fast enough?</h2>
             <p>
                 When you've picked 3 loading times that are too slow, you can
                 see the results
