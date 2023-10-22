@@ -9,7 +9,7 @@ export const options = {
         title: "observations",
     },
     vAxis: {
-        title: "load times in milliseconds",
+        title: "milliseconds",
     },
     legend: { position: "bottom" },
 };
