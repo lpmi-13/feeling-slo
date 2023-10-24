@@ -11,7 +11,6 @@ export const options = {
     vAxis: {
         title: "milliseconds",
     },
-    legend: { position: "bottom" },
 };
 
 const LoadingGraph = ({ averageUnhappy, data, slowestUnhappy }) => {
