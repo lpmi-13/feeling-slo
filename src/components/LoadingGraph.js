@@ -1,6 +1,6 @@
 import { Chart } from "react-google-charts";
 
-export const defaultData = [["x", "load time", "mild SLO", "strict SLO"]];
+export const defaultData = [["x", "load time", "mild", "strict"]];
 
 export const options = {
     title: "Potential SLOs",
