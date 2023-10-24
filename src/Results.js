@@ -139,7 +139,10 @@ export default function Results({ data }) {
                     </p>
                 </div>
             ) : (
-                <p>no data yet!</p>
+                <p>
+                    no data yet! Go to <a href="/loading">the loading page</a>{" "}
+                    and identify 3 loading times that are too slow.
+                </p>
             )}
         </div>
     );
