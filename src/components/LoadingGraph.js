@@ -5,12 +5,13 @@ export const defaultData = [["x", "load time", "mild SLO", "strict SLO"]];
 export const options = {
     title: "Potential SLOs",
     colors: ["blue", "orange", "red"],
-    hAxis: {
-        title: "observations",
-    },
     vAxis: {
         title: "milliseconds",
     },
+    hAxis: {
+        textPosition: "none",
+    },
+    legend: { position: "bottom" },
 };
 
 const LoadingGraph = ({ averageUnhappy, data, slowestUnhappy }) => {
