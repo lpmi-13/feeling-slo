@@ -26,7 +26,7 @@ const LoadingGraph = ({ averageUnhappy, data, slowestUnhappy }) => {
         <Chart
             chartType="LineChart"
             width="100%"
-            height="25em"
+            height="21em"
             data={defaultData.concat(modifiedData)}
             options={options}
         />
