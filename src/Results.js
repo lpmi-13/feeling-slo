@@ -52,7 +52,7 @@ const fastLoadTimes = generateDataPoints(
 // load times between 200-500 ms (5% of the data)
 const veryFastLoadTimes = generateDataPoints(
     NUMBER_OF_DATA_POINTS_TO_GENERATE * 0.05,
-    200,
+    50,
     500
 );
 
