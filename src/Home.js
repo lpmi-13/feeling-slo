@@ -15,9 +15,13 @@ export default function Home() {
             </ol>
             <div className="intro">
                 <p>
-                    This is an app to practice feeling how SLOs are actually
-                    related to user experience. On the "Loading page", you'll
-                    get a randomly generated delay in the page load.
+                    This is an app to practice feeling how SLOs{" "}
+                    <a href="https://en.wikipedia.org/wiki/Service-level_objective">
+                        (service level objectives)
+                    </a>{" "}
+                    are actually related to user experience. On the "Loading
+                    page", you'll get a randomly generated delay in the page
+                    load.
                 </p>
                 <p>
                     When the load speed is too slow, click the "too slow"
